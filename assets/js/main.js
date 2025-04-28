@@ -1,24 +1,27 @@
-const offset = 0;
-const limit = 20;
+const limit = 10;
+let offset = 0;
+const maxRecords = 151
 
 const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`;
+
+const pokemonList = document.getElementById('pokemonList');
+const loadMoreButton = document.getElementById('loadMoreButton');
 
 
 function convertPokemonToLi(pokemon){
     return `
-    <li class="pokemon">
-            <span class="number">#001</span>
+    <li class="pokemon ${pokemon.type}">
+            <span class="number">#${pokemon.number}</span>
             <span class="name">${pokemon.name}</span>
 
             <div class="detail">
 
                 <ol class="types">
-                     <li class="type">grass</li>
-                     <li class="type">poison</li>
-
+                    ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
+ 
                 </ol>
 
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg" 
+                <img src="${pokemon.photo}" 
                 alt=${pokemon.name}>
             </div>
             
@@ -28,10 +31,25 @@ function convertPokemonToLi(pokemon){
 }
 
         
-const pokemonList = document.getElementById('pokemonList');
+function loadPokemonItens(offset, limit) {
+    pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
+        const newHtml = pokemons.map(convertPokemonToLi).join('')
+        pokemonList.innerHTML += newHtml
+    })
+    
+}
+loadPokemonItens(offset, limit)
 
+loadMoreButton.addEventListener('click', () => {
+    offset += limit
+    const qtdRecordsWithNexpage = offset + limit
 
-pokeApi.getPokemons().then((pokemons = []) => {
-    pokemonList.innerHTML = pokemons.map(convertPokemonToLi).join('')
+    if(qtdRecordsWithNexpage >=maxRecords) {
+        const newLimit = maxRecords - offset
+        loadPokemonItens(offset, newLimit)
+
+        loadMoreButton.parentElement.removeChild(loadMoreButton)
+    }else{
+        loadPokemonItens(offset, limit)
+    }
 })
-.catch((error) => console.log(error));
