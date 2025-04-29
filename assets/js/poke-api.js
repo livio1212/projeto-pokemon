@@ -2,22 +2,16 @@ const pokeApi = {}
 
 
 function convertPokeApiDetailToPokemon(pokeDetail){
-    const pokemon = new Pokemon()
-    pokemon.name = pokeDetail.name;
+    const pokemon = new Pokemon();
     pokemon.number = pokeDetail.id;
-    pokemon.weight = pokemon.weight;
-    pokemon.ability = pokemon.ability;
-    pokemon.height = pokemon.height;
-    pokemon.specie = pokemon.specie;
-   
-
-    const types = pokeDetail.types.map((typeSlot) => typeSlot.type.name)
-    const [type] = types
-
-    pokemon.types = types
-    pokemon.type = type
-
-    pokemon.photo = pokeDetail.sprites.other.dream_world.front_default
+    pokemon.name = pokeDetail.name;
+    pokemon.types = pokeDetail.types.map(typeSlot => typeSlot.type.name);
+    pokemon.type = pokemon.types[0];
+    pokemon.photo = pokeDetail.sprites.other['official-artwork'].front_default;
+    pokemon.height = pokeDetail.height / 10;
+    pokemon.weight = pokeDetail.weight / 10;
+    pokemon.abilities = pokeDetail.abilities.map(a => a.ability.name);
+    pokemon.speciesUrl = pokeDetail.species.url;
 
     return pokemon
     
@@ -26,8 +20,17 @@ function convertPokeApiDetailToPokemon(pokeDetail){
 
 pokeApi.getPokemonsDetail = (pokemon) => {
     return fetch(pokemon.url)
-    .then((response) => response.json())
-    .then(convertPokeApiDetailToPokemon)
+    .then(response => response.json())
+    .then(pokeDetail => {
+      const pokemonData = convertPokeApiDetailToPokemon(pokeDetail);
+      return fetch(pokemonData.speciesUrl)
+        .then(res => res.json())
+        .then(speciesData => {
+          pokemonData.eggGroup = speciesData.egg_groups.map(g => g.name).join(', ');
+          pokemonData.eggCycle = speciesData.hatch_counter;
+          return pokemonData;
+        });
+    });
 }
 
 

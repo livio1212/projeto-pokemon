@@ -8,5 +8,9 @@ class Pokemon{
     height;
     specie;
     weight;
+    gender;
+    eggGroup;
+    eggCycle;
+    
 
 }
