@@ -9,8 +9,8 @@ const loadMoreButton = document.getElementById('loadMoreButton');
 
 
 function convertPokemonToLi(pokemon){
-    return `
-    <li class="pokemon ${pokemon.type}">
+    return ` 
+    <li class="pokemon ${pokemon.type}" onclick="">
             <span class="number">#${pokemon.number}</span>
             <span class="name">${pokemon.name}</span>
 
@@ -28,6 +28,10 @@ function convertPokemonToLi(pokemon){
         </li>
         `
         
+}
+
+function convertPokemonDetails(pokemon){
+
 }
 
         
@@ -53,3 +57,5 @@ loadMoreButton.addEventListener('click', () => {
         loadPokemonItens(offset, limit)
     }
 })
+
+

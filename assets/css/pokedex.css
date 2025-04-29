@@ -10,11 +10,11 @@
 }
 
 .grass {
-  background-color: #77c850;
+  background-color: #72ceaf;
 }
 
 .fire {
-  background-color: #ee7f30;
+  background-color: #eb7171;
 }
 
 .water {
@@ -88,7 +88,16 @@
 
 
 .content h1{
-    margin: 0;
+  font-family: 'Inter', sans-serif; 
+  font-size: 40px;
+  font-weight: 600;
+  color: #1e1e1e;
+  letter-spacing: -0.5px;
+  margin: 0;
+  padding: 0;
+  border-left: 6px solid teal; 
+  padding-left: 16px;
+  transition: all 0.3s ease;
 }   
 .pokemons{
     display: grid;
@@ -103,8 +112,10 @@
 
 
 .pokemon{
+  
+  box-shadow:  8px -10px teal;
   margin: .5rem;
-  padding: 2rem 1rem;
+  padding: 1rem 1rem;
   border-radius: 1rem;
   color: #fff;
   flex-direction: column;
